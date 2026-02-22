@@ -361,7 +361,7 @@ git commit -m "chore: add pre-commit hooks for ruff and lintr"
 ```markdown
 # tiller
 
-Breeding informatics platform. Challenger to Genovix for small barley and triticale
+Breeding informatics platform  for small barley and triticale
 breeding programs. Built on Breedbase T3, deployed on Azure.
 
 See `CLAUDE.md` for full architecture and domain context.

@@ -9,7 +9,7 @@ management system. Read this before any coding, architecture, or design work.
 
 We are building a commercial, hosted breeding information management system (BIMS) to compete
 with and replace Genovix — a proprietary system used by a small barley and triticale breeding
-program in Edmonton, Alberta (formerly run by the Government of Alberta).
+program.
 
 **The problem with Genovix:**
 - Costs ~$25k CAD/year
@@ -24,8 +24,8 @@ to be repeatable across multiple small breeding programs.
 
 ## Team
 
-- **Software engineer** (me) — architecture, build, deployment, maintenance
-- **Senior plant breeder** (my father) — domain expertise, advisory relationship with the
+- **Software engineer** architecture, build, deployment, maintenance
+- **Senior plant breeder** domain expertise, advisory relationship with the
   initial client, analytical pipeline, report design
 - The breeder has an existing trusted advisory relationship with the Edmonton client, which
   is the initial commercial opportunity.
