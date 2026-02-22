@@ -28,6 +28,9 @@ _freeze/
 Thumbs.db
 
 # Secrets / environment
-.env
+.env*
+!.env.example
+!.env.template
 .Renviron
 *.pem
+*.key
