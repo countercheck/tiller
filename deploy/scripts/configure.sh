@@ -42,15 +42,31 @@ for var in "${required_vars[@]}"; do
     [[ -n "${!var:-}" ]] || { echo "Error: required variable $var is not set" >&2; exit 1; }
 done
 
-# Use | as sed delimiter so hostnames/URLs (containing /) don't break substitution
+# Escape characters that are special in a sed replacement expression (\, &, and the | delimiter)
+escape_replacement() {
+    printf '%s' "$1" | sed 's/[\\|&]/\\&/g'
+}
+
+CLIENT_HOSTNAME_ESC=$(escape_replacement "$CLIENT_HOSTNAME")
+CLIENT_NAME_ESC=$(escape_replacement "$CLIENT_NAME")
+DB_PASSWORD_ESC=$(escape_replacement "$DB_PASSWORD")
+PROGRAM_NAME_ESC=$(escape_replacement "$PROGRAM_NAME")
+CONTACT_EMAIL_ESC=$(escape_replacement "$CONTACT_EMAIL")
+AZURE_STORAGE_ACCOUNT_ESC=$(escape_replacement "$AZURE_STORAGE_ACCOUNT")
+AZURE_CONTAINER_ESC=$(escape_replacement "$AZURE_CONTAINER")
+
+# Create destination directory if it doesn't exist
+DST_DIR=$(dirname "$DST")
+mkdir -p "$DST_DIR"
+
 sed \
-    -e "s|{{CLIENT_HOSTNAME}}|${CLIENT_HOSTNAME}|g" \
-    -e "s|{{CLIENT_NAME}}|${CLIENT_NAME}|g" \
-    -e "s|{{DB_PASSWORD}}|${DB_PASSWORD}|g" \
-    -e "s|{{PROGRAM_NAME}}|${PROGRAM_NAME}|g" \
-    -e "s|{{CONTACT_EMAIL}}|${CONTACT_EMAIL}|g" \
-    -e "s|{{AZURE_STORAGE_ACCOUNT}}|${AZURE_STORAGE_ACCOUNT}|g" \
-    -e "s|{{AZURE_CONTAINER}}|${AZURE_CONTAINER}|g" \
+    -e "s|{{CLIENT_HOSTNAME}}|${CLIENT_HOSTNAME_ESC}|g" \
+    -e "s|{{CLIENT_NAME}}|${CLIENT_NAME_ESC}|g" \
+    -e "s|{{DB_PASSWORD}}|${DB_PASSWORD_ESC}|g" \
+    -e "s|{{PROGRAM_NAME}}|${PROGRAM_NAME_ESC}|g" \
+    -e "s|{{CONTACT_EMAIL}}|${CONTACT_EMAIL_ESC}|g" \
+    -e "s|{{AZURE_STORAGE_ACCOUNT}}|${AZURE_STORAGE_ACCOUNT_ESC}|g" \
+    -e "s|{{AZURE_CONTAINER}}|${AZURE_CONTAINER_ESC}|g" \
     "$SRC" > "$DST"
 
 echo "Configured: $SRC → $DST"
