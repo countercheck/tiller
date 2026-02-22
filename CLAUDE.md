@@ -238,7 +238,7 @@ client actually needs.
 - Updates require pulling new Docker image + running DB migration patches via `breedbase update`
 - Use bind-mounted directories (not Docker-managed volumes) for PostgreSQL data and uploaded
   files — makes backups straightforward filesystem operations
-- Barley Composite Ontology (CO_202) is pre-loaded in the T3 fork
+- Barley Composite Ontology (CO_323) is pre-loaded in the T3 fork
 - Triticale traits: use overlapping wheat/barley ontology terms where possible, define custom
   terms for triticale-specific traits
 

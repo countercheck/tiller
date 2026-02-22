@@ -36,9 +36,12 @@ deploy/
 | `{{CLIENT_HOSTNAME}}` | `edmonton.ourplatform.ca` | nginx, sgn_local.conf |
 | `{{CLIENT_NAME}}` | `edmonton` | sgn_local.conf, backup.sh |
 | `{{DB_PASSWORD}}` | *(generated at deploy time)* | sgn_local.conf |
-| `{{PROGRAM_NAME}}` | `AB_Barley` | sgn_local.conf |
+| `{{CONTACT_EMAIL}}` | `admin@ourplatform.ca` | sgn_local.conf |
 | `{{AZURE_STORAGE_ACCOUNT}}` | `tillerbackups` | backup.sh |
 | `{{AZURE_CONTAINER}}` | `edmonton-backups` | backup.sh |
+
+Note: `PROGRAM_NAME` (the Breedbase breeding program, e.g. `AB_Barley`) is not a
+config file value — it is created through the Breedbase UI after deployment.
 
 `configure.sh` accepts these as environment variables and runs `sed` substitution,
 writing configured files to their install paths.
