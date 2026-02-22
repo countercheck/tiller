@@ -21,17 +21,32 @@ set -euo pipefail
 : "${AZURE_CONTAINER:?AZURE_CONTAINER is required}"
 
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-BACKUP_FILE="/tmp/breedbase_${CLIENT_NAME}_${TIMESTAMP}.sql.gz"
+DUMP_FILE="/tmp/breedbase_${CLIENT_NAME}_${TIMESTAMP}.sql"
+BACKUP_FILE="${DUMP_FILE}.gz"
 BLOB_NAME="breedbase_${CLIENT_NAME}_${TIMESTAMP}.sql.gz"
+
+# Clean up temp files on any exit (success or failure)
+cleanup() { rm -f "$DUMP_FILE" "$BACKUP_FILE"; }
+trap cleanup EXIT
 
 echo "[$(date)] Starting backup for client: ${CLIENT_NAME}"
 
-# Dump database from running container
-docker exec breedbase_db \
-    pg_dump -U postgres cxgn_hordeum \
-    | gzip > "$BACKUP_FILE"
+# Verify container is running before attempting dump
+if ! docker inspect --format '{{.State.Running}}' breedbase_db 2>/dev/null | grep -q true; then
+    echo "[$(date)] ERROR: breedbase_db container is not running" >&2
+    exit 1
+fi
 
-echo "[$(date)] Dump complete: ${BACKUP_FILE}"
+# Dump database to a temp file first (not piped — detects partial dumps correctly)
+# Uses postgres superuser: web_usr lacks DUMP privileges; postgres has trust auth in the container
+docker exec breedbase_db pg_dump -U postgres cxgn_hordeum > "$DUMP_FILE"
+
+echo "[$(date)] Dump complete: ${DUMP_FILE}"
+
+# Compress the verified dump
+gzip "$DUMP_FILE"
+
+echo "[$(date)] Compressed: ${BACKUP_FILE}"
 
 # Upload to Azure Blob Storage (uses VM managed identity — no stored credentials)
 az storage blob upload \
@@ -43,8 +58,5 @@ az storage blob upload \
     --output none
 
 echo "[$(date)] Uploaded: ${BLOB_NAME}"
-
-# Remove local dump
-rm "${BACKUP_FILE}"
 
 echo "[$(date)] Backup complete"
