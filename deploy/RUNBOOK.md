@@ -38,9 +38,20 @@ az login --identity
 
 ## 2. Clone T3 Breedbase
 
+TriticeaeToolbox/breedbase publishes no tags or releases — only a `master` branch. Pin
+deployments to a reviewed commit SHA; do **not** clone the default branch, as it is a
+mutable reference outside our control. Update the SHA only after reviewing upstream changes
+and testing on a staging instance.
+
 ```bash
+# Vetted 2025-07-30: "Update traits: Fix docker compose cp command"
+BREEDBASE_SHA="0a4d34aa0fcab30ce6680b8baf960bf2c7ef5869"
+
 cd /opt
 sudo git clone https://github.com/TriticeaeToolbox/breedbase
+cd breedbase
+sudo git checkout "$BREEDBASE_SHA"
+cd /opt
 sudo chown -R $USER:$USER breedbase
 ```
 
@@ -239,8 +250,14 @@ cd /opt/breedbase
 ```
 
 **Update Breedbase:**
+
+Review upstream commits, test on staging, then update the pinned SHA in this runbook and
+check out the new SHA on the production VM before running the update helper:
+
 ```bash
 cd /opt/breedbase
+sudo git fetch origin
+sudo git checkout <new-reviewed-sha>
 ./bin/breedbase update
 ```
 
