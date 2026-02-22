@@ -40,6 +40,7 @@ fi
 # Dump database to a temp file first (not piped — detects partial dumps correctly)
 # Uses postgres superuser: web_usr lacks DUMP privileges; postgres has trust auth in the container
 docker exec breedbase_db pg_dump -U postgres cxgn_hordeum > "$DUMP_FILE"
+chmod 600 "$DUMP_FILE"
 
 echo "[$(date)] Dump complete: ${DUMP_FILE}"
 

@@ -63,8 +63,7 @@ Create `/etc/breedbase-client.env` (not committed to git — contains secrets):
 sudo tee /etc/breedbase-client.env > /dev/null <<EOF
 CLIENT_HOSTNAME=edmonton.ourplatform.ca
 CLIENT_NAME=edmonton
-DB_PASSWORD=$(openssl rand -base64 24 | tr -d /+=)
-PROGRAM_NAME=AB_Barley
+DB_PASSWORD=$(openssl rand -base64 24)
 CONTACT_EMAIL=admin@ourplatform.ca
 AZURE_STORAGE_ACCOUNT=tillerbackups
 AZURE_CONTAINER=edmonton-backups
@@ -84,34 +83,52 @@ set -a; source /etc/breedbase-client.env; set +a
 
 ```bash
 # Write nginx config from template
-sudo bash /opt/tiller/deploy/scripts/configure.sh \
+# sudo does not inherit environment variables — source the env file inside the sudo shell
+sudo bash -c 'set -a; source /etc/breedbase-client.env; set +a; \
+    bash /opt/tiller/deploy/scripts/configure.sh \
     /opt/tiller/deploy/nginx/breedbase.conf.template \
-    /etc/nginx/sites-available/breedbase
+    /etc/nginx/sites-available/breedbase'
 
 # Enable the site, remove default
 sudo ln -s /etc/nginx/sites-available/breedbase /etc/nginx/sites-enabled/breedbase
 sudo rm -f /etc/nginx/sites-enabled/default
+```
 
-# Start nginx (port 80 only until certbot adds the cert)
+Do **not** start nginx yet — the config references SSL cert paths that don't exist until step 6.
+
+---
+
+## 6. Obtain SSL certificate and start nginx
+
+Our nginx template already references the Let's Encrypt cert paths, so nginx can't start
+until the cert exists. Use certbot's standalone mode (no nginx required) to obtain the cert
+first, then start nginx.
+
+```bash
+# Stop nginx if it auto-started during apt install
+sudo systemctl stop nginx 2>/dev/null || true
+
+# Obtain certificate (standalone — binds port 80 directly)
+sudo certbot certonly --standalone \
+    -d $CLIENT_HOSTNAME \
+    --non-interactive --agree-tos \
+    -m $CONTACT_EMAIL
+
+# Verify config then start nginx
+sudo nginx -t
 sudo systemctl start nginx
 sudo systemctl enable nginx
 ```
 
 ---
 
-## 6. Obtain SSL certificate
+## 7. Configure Breedbase (sgn_local.conf)
 
-Certbot reads the nginx config, obtains the certificate, and installs the cert paths.
-Our template already references `/etc/letsencrypt/live/$CLIENT_HOSTNAME/` — the same
-paths certbot creates — so no further nginx edits are needed after this step.
+If you're in a new shell, re-source the env file first:
 
 ```bash
-sudo certbot --nginx -d $CLIENT_HOSTNAME --non-interactive --agree-tos -m $CONTACT_EMAIL
+set -a; source /etc/breedbase-client.env; set +a
 ```
-
----
-
-## 7. Configure Breedbase (sgn_local.conf)
 
 ```bash
 bash /opt/tiller/deploy/scripts/configure.sh \
@@ -131,6 +148,7 @@ cd /opt/breedbase
 ```
 
 When prompted for the database password, use `$DB_PASSWORD` from step 4.
+If you're in a new shell: `set -a; source /etc/breedbase-client.env; set +a`, then `echo $DB_PASSWORD`.
 
 ---
 
@@ -161,8 +179,8 @@ sudo cp /opt/tiller/deploy/scripts/backup.sh /usr/local/bin/breedbase-backup
 sudo chmod +x /usr/local/bin/breedbase-backup
 
 # Install cron job (runs every Sunday at 02:00)
-# env is used to load variables because 'source' does not work in cron
-(crontab -l 2>/dev/null; echo "0 2 * * 0  env \$(grep -v '^#' /etc/breedbase-client.env | xargs) /usr/local/bin/breedbase-backup >> /var/log/breedbase-backup.log 2>&1") | crontab -
+# Use 'bash -c' to source env vars — env $(xargs) would expose secrets in ps output
+(crontab -l 2>/dev/null; echo "0 2 * * 0  bash -c 'set -a; source /etc/breedbase-client.env; set +a; exec /usr/local/bin/breedbase-backup' >> /var/log/breedbase-backup.log 2>&1") | crontab -
 ```
 
 ---
@@ -185,6 +203,29 @@ sudo chmod +x /usr/local/bin/breedbase-backup
   ```
 
 - [ ] `./bin/breedbase status` shows all containers running
+
+---
+
+## Backup retention
+
+Backups accumulate indefinitely. Set a lifecycle management policy on the Azure container
+to delete blobs older than your retention target (e.g. 90 days):
+
+```bash
+az storage account management-policy create \
+    --account-name $AZURE_STORAGE_ACCOUNT \
+    --policy '{
+      "rules": [{
+        "name": "delete-old-backups",
+        "enabled": true,
+        "type": "Lifecycle",
+        "definition": {
+          "filters": {"blobTypes": ["blockBlob"], "prefixMatch": ["breedbase_"]},
+          "actions": {"baseBlob": {"delete": {"daysAfterModificationGreaterThan": 90}}}
+        }
+      }]
+    }'
+```
 
 ---
 

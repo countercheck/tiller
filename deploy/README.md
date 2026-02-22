@@ -36,14 +36,22 @@ variables and performs substitution via sed.
 | `{{CLIENT_HOSTNAME}}` | Public hostname, e.g. `edmonton.ourplatform.ca` | nginx, sgn_local.conf |
 | `{{CLIENT_NAME}}` | Short client identifier, e.g. `edmonton` | sgn_local.conf |
 | `{{DB_PASSWORD}}` | PostgreSQL password for `web_usr` — generate at deploy time | sgn_local.conf |
-| `{{PROGRAM_NAME}}` | Breedbase program name, e.g. `AB_Barley` — reserved for future templates | (future templates) |
 | `{{CONTACT_EMAIL}}` | Admin contact address | sgn_local.conf |
-| `{{AZURE_STORAGE_ACCOUNT}}` | Azure storage account for backups | backup.sh (env var) |
-| `{{AZURE_CONTAINER}}` | Azure blob container for backups | backup.sh (env var) |
 
-Note: `PROGRAM_NAME` is required by `configure.sh` but no current template uses
-`{{PROGRAM_NAME}}`. The actual Breedbase breeding program (e.g. `AB_Barley`) is created
-through the Breedbase web UI after deployment.
+The Breedbase breeding program name (e.g. `AB_Barley`) is set through the Breedbase web UI
+after deployment, not via a template placeholder.
+
+## Backup environment variables
+
+`backup.sh` is not a template — it reads these at runtime from the environment:
+
+| Variable | Description |
+|---|---|
+| `CLIENT_NAME` | Used in backup filename |
+| `AZURE_STORAGE_ACCOUNT` | Azure storage account name |
+| `AZURE_CONTAINER` | Azure blob container name |
+
+These are stored in `/etc/breedbase-client.env` alongside the template placeholders.
 
 ## Tests
 

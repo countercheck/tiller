@@ -53,29 +53,20 @@ cat > "$WORKDIR/test.template" <<'TMPL'
 host={{CLIENT_HOSTNAME}}
 name={{CLIENT_NAME}}
 pass={{DB_PASSWORD}}
-prog={{PROGRAM_NAME}}
 email={{CONTACT_EMAIL}}
-stor={{AZURE_STORAGE_ACCOUNT}}
-cont={{AZURE_CONTAINER}}
 TMPL
 
 export CLIENT_HOSTNAME="test.example.com"
 export CLIENT_NAME="testclient"
 export DB_PASSWORD="secret123"
-export PROGRAM_NAME="TEST_BARLEY"
 export CONTACT_EMAIL="breeder@example.com"
-export AZURE_STORAGE_ACCOUNT="teststore"
-export AZURE_CONTAINER="test-backups"
 
 bash "$CONFIGURE" "$WORKDIR/test.template" "$WORKDIR/test.output"
 
 assert_contains     "CLIENT_HOSTNAME substituted"    "host=test.example.com"     "$WORKDIR/test.output"
 assert_contains     "CLIENT_NAME substituted"        "name=testclient"           "$WORKDIR/test.output"
 assert_contains     "DB_PASSWORD substituted"        "pass=secret123"            "$WORKDIR/test.output"
-assert_contains     "PROGRAM_NAME substituted"       "prog=TEST_BARLEY"          "$WORKDIR/test.output"
 assert_contains     "CONTACT_EMAIL substituted"      "email=breeder@example.com" "$WORKDIR/test.output"
-assert_contains     "AZURE_STORAGE_ACCOUNT subst."   "stor=teststore"            "$WORKDIR/test.output"
-assert_contains     "AZURE_CONTAINER substituted"    "cont=test-backups"         "$WORKDIR/test.output"
 assert_not_contains "No unreplaced placeholders"     "{{"                        "$WORKDIR/test.output"
 
 echo ""
@@ -96,7 +87,7 @@ assert_contains "output written to new directory" "host=test.example.com" "$WORK
 echo ""
 echo "--- Test: missing required variables cause failure ---"
 
-for var in CLIENT_HOSTNAME CLIENT_NAME DB_PASSWORD PROGRAM_NAME CONTACT_EMAIL AZURE_STORAGE_ACCOUNT AZURE_CONTAINER; do
+for var in CLIENT_HOSTNAME CLIENT_NAME DB_PASSWORD CONTACT_EMAIL; do
     saved="${!var}"
     unset "$var"
     assert_fails "exits non-zero when $var is missing" bash "$CONFIGURE" "$WORKDIR/test.template" "$WORKDIR/test.fail_output"
