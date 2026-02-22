@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+*.egg
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+renv/library/
+renv/staging/
+*.Rcheck/
+
+# Quarto
+_site/
+_freeze/
+/.quarto/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets / environment
+.env
+.Renviron
+*.pem
