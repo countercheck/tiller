@@ -1,0 +1,78 @@
+# deploy/breedbase/sgn_local.conf.template
+# Substitute all {{PLACEHOLDERS}} via configure.sh before copying into the T3 config/ dir.
+# This configures the barley (hordeum) instance.
+# For a triticale instance, copy this file and adjust trait_ontology_db_name,
+# onto_root_namespaces, trait_cv_name, preferred_species, and dbname.
+
+main_production_site_url  https://{{CLIENT_HOSTNAME}}
+
+dbhost    breedbase_db
+dbname    cxgn_hordeum
+dbuser    web_usr
+dbpass    {{DB_PASSWORD}}
+
+contact_email    {{CONTACT_EMAIL}}
+
+# SMTP — leave blank to disable email (acceptable for initial deployment)
+smtp_server
+smtp_port
+smtp_login
+smtp_pass
+smtp_from
+smtp_layer
+smtp_auth
+
+disable_add_user        0
+disable_login           0
+user_auto_submitter     0
+
+# File submission paths (bind-mounted; do not change)
+submission_path         /home/production/submissions
+allow_trial_submissions 1
+allow_file_submissions  0
+
+# Barley Composite Ontology (CO_323) — pre-loaded in T3 fork
+trait_ontology_db_name           CO_323
+onto_root_namespaces             CO_323 (Barley Trait Ontology), GO (Gene Ontology), PO (Plant Ontology), SO (Sequence Ontology), PATO (Phenotype and Trait Ontology)
+trait_cv_name                    barley_trait
+trait_variable_onto_root_namespace  CO_323 (Barley Trait Ontology), COMP (Composed Variables)
+composable_cvs                   trait,toy
+composable_cvs_allowed_combinations Time Series|trait+toy
+composable_toy_root_cvterm       "time of year|TIME:0000005"
+
+editable_stock_props             variety,country of origin,notes,accession number,PUI,organization,purdy pedigree,filial generation
+
+preferred_species    Hordeum
+identifier_prefix    CB
+project_name         {{CLIENT_NAME}}
+
+# Fixed internal paths (do not change — match Docker bind mounts in T3 docker-compose.yml)
+rootpath          /home/production/cxgn
+basepath          /home/production/cxgn/sgn
+www_user          www-data
+www_group         www-data
+production_server 1
+image_dir         /images/image_files_hordeum
+image_path        /home/production/public/images/image_files_hordeum
+cluster_shared_tempdir  /home/production/tmp
+tempfiles_base          /home/production/tmp/hordeum-site
+static_datasets_path    /home/production/public
+static_content_url      /static_content
+static_content_path     /home/production/cxgn/hordeum/static_content
+homepage_files_dir      /home/production/cxgn/hordeum/static_content
+trial_download_logfile  /home/production/logs/hordeum
+archive_path            /home/production/archive
+submit_dir              /home/production/public/submit-uploads
+blast_path              ""
+blast_db_path           /home/production/cxgn_blast_databases
+solgs_dir               /home/production/tmp/solgs/__USERNAME__
+
+synonym_search_tool_host  https://synonyms.triticeaetoolbox.org
+
+<Controller::Cview>
+  cview_default_map_id  25
+</Controller::Cview>
+
+<View::Mason>
+  add_comp_root  /home/production/cxgn/hordeum/mason
+</View::Mason>
