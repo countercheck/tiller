@@ -79,6 +79,8 @@ CONTACT_EMAIL=admin@ourplatform.ca
 AZURE_STORAGE_ACCOUNT=tillerbackups
 AZURE_CONTAINER=edmonton-backups
 EOF
+# Give ownership to the deployment user so they can source it without sudo
+sudo chown $USER /etc/breedbase-client.env
 sudo chmod 600 /etc/breedbase-client.env
 ```
 

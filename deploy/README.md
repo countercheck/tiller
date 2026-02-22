@@ -51,7 +51,9 @@ after deployment, not via a template placeholder.
 | `AZURE_STORAGE_ACCOUNT` | Azure storage account name |
 | `AZURE_CONTAINER` | Azure blob container name |
 
-These are stored in `/etc/breedbase-client.env` alongside the template placeholders.
+These are stored in `/etc/breedbase-client.env` alongside the template placeholders. The file
+is created by `sudo tee` (root-owned by default); the RUNBOOK immediately `chown`s it to the
+deployment user so it can be sourced directly and read by cron jobs running as that user.
 
 ## Tests
 
