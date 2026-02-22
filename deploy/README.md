@@ -2,6 +2,10 @@
 
 Deployment artefacts for the Breedbase T3 stack on Azure.
 
+Contains everything needed to stand up a new client instance: containers, reverse
+proxy config, Breedbase configuration, and backup automation. See `RUNBOOK.md`
+for the step-by-step procedure (to be written).
+
 ## Contents (to be added)
 
 - `docker-compose.yml` — Breedbase web + PostgreSQL 12 containers

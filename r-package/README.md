@@ -12,9 +12,10 @@ functions against the Breedbase BrAPI endpoint.
 ## Example usage
 
 ```r
-con <- bb_connect("https://clientname.ourplatform.ca", token = Sys.getenv("BB_TOKEN"))
-trials <- get_trials(con, program = "AB_Barley", year = 2024)
-obs    <- get_observations(con, trial = trials$trialDbId[1])
+con       <- bb_connect("https://clientname.ourplatform.ca", token = Sys.getenv("BB_TOKEN"))
+trials    <- get_trials(con, program = "AB_Barley", year = 2024)
+germplasm <- get_germplasm(con, trial = trials$trialDbId[1])
+obs       <- get_observations(con, trial = trials$trialDbId[1])
 ```
 
 ## Contents (to be added)

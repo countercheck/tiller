@@ -1,10 +1,11 @@
 # pipeline
 
-R analytical pipeline: trial analysis, combined analysis, GBLUP, breeding values.
+R analytical pipeline. Full scope (Phase 2+): trial analysis, combined analysis,
+GBLUP, and breeding values.
 
 Connects to Breedbase via the r-package BrAPI client.
 
-## Key R packages
+## Key R Packages
 
 - lme4 + emmeans — trial analysis
 - rrBLUP / sommer — GBLUP and breeding value estimation

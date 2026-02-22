@@ -8,6 +8,11 @@ Hosted on open-source Shiny Server on the client Azure VM.
 
 Client breeder. UI-only — no R knowledge required.
 
+## Note
+
+Built in Phase 2. Will use the `golem` package structure if the app grows beyond
+simple scripts.
+
 ## Contents (to be added)
 
-Built in Phase 2. Will use golem package structure if app grows beyond simple scripts.
+- App scripts and modules (to be determined in Phase 2)
