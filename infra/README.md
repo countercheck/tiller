@@ -1,12 +1,56 @@
 # infra
 
-Bicep/ARM templates for provisioning Azure infrastructure per client deployment.
+Terraform configuration for provisioning Azure infrastructure per client deployment.
 
-Each client gets an isolated resource group containing a VM, networking, and storage.
+Each client gets an isolated resource group containing a VM, networking, managed identity,
+and a blob container in the shared backup storage account.
 
-## Contents (to be added)
+## Provider isolation
 
-- `main.bicep` — top-level Bicep template
-- `vm.bicep` — VM + networking module
-- `storage.bicep` — Azure Blob Storage for backups
-- `parameters/` — per-client parameter files
+The `azure/` directory is the Azure-specific implementation. The `variables.tf` and
+`outputs.tf` in that directory define the contract: what goes in, what comes out. A future
+provider implementation (`aws/`, `gcp/`) would accept the same variables and produce the
+same outputs using provider-specific resources.
+
+## Prerequisites
+
+- Terraform >= 1.9 installed
+- Azure CLI authenticated: `az login`
+- `ARM_SUBSCRIPTION_ID` environment variable set
+- Shared backup storage account pre-created (once, manually):
+  ```bash
+  az group create --name tiller-platform --location canadacentral
+  az storage account create \
+      --name tillerbackups \
+      --resource-group tiller-platform \
+      --location canadacentral \
+      --sku Standard_LRS \
+      --kind StorageV2
+  ```
+
+## Deploying a new client
+
+```bash
+cd infra/azure
+
+# 1. Edit clients/<client>.tfvars with correct values (copy from edmonton.tfvars)
+# 2. Provision
+export ARM_SUBSCRIPTION_ID="<your-subscription-id>"
+terraform init
+terraform plan  -var-file=clients/<client>.tfvars
+terraform apply -var-file=clients/<client>.tfvars
+
+# 3. Note outputs for use in the RUNBOOK
+terraform output public_ip_address     # → set DNS A record
+terraform output backup_container_name # → AZURE_CONTAINER in breedbase-client.env
+```
+
+## Contents
+
+- `providers.tf` — Terraform and azurerm provider version constraints
+- `variables.tf` — input contract
+- `outputs.tf` — output contract
+- `main.tf` — composes modules
+- `modules/vm/` — VM, VNet, NSG, managed identity, Storage Blob Data Contributor role
+- `modules/backup-container/` — blob container in shared storage account
+- `clients/` — per-client `.tfvars` files (committed, no secrets)
