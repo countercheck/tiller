@@ -37,7 +37,7 @@ cd infra/azure
 # 2. Provision
 export ARM_SUBSCRIPTION_ID="<your-subscription-id>"
 terraform init
-terraform plan  -var-file=clients/<client>.tfvars
+terraform plan -var-file=clients/<client>.tfvars
 terraform apply -var-file=clients/<client>.tfvars
 
 # 3. Note outputs for use in the RUNBOOK
