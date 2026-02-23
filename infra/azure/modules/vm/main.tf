@@ -19,7 +19,7 @@ data "azurerm_storage_account" "backup" {
 }
 
 resource "azurerm_role_assignment" "backup_contributor" {
-  scope                = data.azurerm_storage_account.backup.id
+  scope                = format("%s/blobServices/default/containers/%s", data.azurerm_storage_account.backup.id, var.client_name)
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azurerm_user_assigned_identity.main.principal_id
 }
