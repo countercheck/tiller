@@ -1,5 +1,5 @@
 # infra/azure/providers.tf
-terraform {
+tofu {
   required_version = ">= 1.9"
   required_providers {
     azurerm = {
@@ -12,5 +12,5 @@ terraform {
 provider "azurerm" {
   features {}
   # subscription_id is read from ARM_SUBSCRIPTION_ID environment variable.
-  # Set it before running terraform: export ARM_SUBSCRIPTION_ID="<your-sub-id>"
+  # Set it before running tofu: export ARM_SUBSCRIPTION_ID="<your-sub-id>"
 }

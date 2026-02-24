@@ -1,6 +1,6 @@
 # infra
 
-Terraform configuration for provisioning Azure infrastructure per client deployment.
+OpenTofu configuration for provisioning Azure infrastructure per client deployment.
 
 Each client gets an isolated resource group containing a VM, networking, managed identity,
 and a blob container in the shared backup storage account.
@@ -14,7 +14,7 @@ same outputs using provider-specific resources.
 
 ## Prerequisites
 
-- Terraform >= 1.9 installed
+- OpenTofu >= 1.9 installed (`brew install opentofu`)
 - Azure CLI authenticated: `az login`
 - `ARM_SUBSCRIPTION_ID` environment variable set
 - Shared backup storage account pre-created (once, manually):
@@ -36,18 +36,18 @@ cd infra/azure
 # 1. Edit clients/<client>.tfvars with correct values (copy from edmonton.tfvars)
 # 2. Provision
 export ARM_SUBSCRIPTION_ID="<your-subscription-id>"
-terraform init
-terraform plan -var-file=clients/<client>.tfvars
-terraform apply -var-file=clients/<client>.tfvars
+tofu init
+tofu plan  -var-file=clients/<client>.tfvars
+tofu apply -var-file=clients/<client>.tfvars
 
 # 3. Note outputs for use in the RUNBOOK
-terraform output public_ip_address     # → set DNS A record
-terraform output backup_container_name # → AZURE_CONTAINER in breedbase-client.env
+tofu output public_ip_address     # → set DNS A record
+tofu output backup_container_name # → AZURE_CONTAINER in breedbase-client.env
 ```
 
 ## Contents
 
-- `providers.tf` — Terraform and azurerm provider version constraints
+- `providers.tf` — OpenTofu and azurerm provider version constraints
 - `variables.tf` — input contract
 - `outputs.tf` — output contract
 - `main.tf` — composes modules
