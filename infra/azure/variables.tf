@@ -3,6 +3,11 @@
 variable "client_name" {
   description = "Short client identifier, e.g. edmonton. Used in resource names."
   type        = string
+
+  validation {
+    condition     = can(regex("^[a-z0-9-]+$", var.client_name)) && length(var.client_name) >= 3 && length(var.client_name) <= 40
+    error_message = "client_name must be 3-40 characters long and contain only lowercase letters, digits, and hyphens to satisfy Azure naming constraints."
+  }
 }
 
 variable "location" {
