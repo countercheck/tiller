@@ -65,7 +65,7 @@ The two team members have different language strengths, and the work is divided 
 ## Business Model
 
 - **Target price:** Competitive annual subscription per client
-- **Infrastructure cost target:** Low per-client cost on Azure B2ms VM
+- **Infrastructure cost target:** Low per-client cost on Azure B4ls_v2 VM
 - **Initial implementation and migration:** Either a modest setup fee or a loss leader for
   the first client to establish a reference deployment
 - **Repeatability is the strategy:** The first deployment builds the runbook, IaC templates,
@@ -213,7 +213,7 @@ client actually needs.
 - **Cloud provider:** Microsoft Azure
 - **Region:** Canada Central (Toronto) — data stays in Canada, no hard residency requirement
   but good practice for government-adjacent clients
-- **VM size:** B2ms (2 vCPU, 8GB RAM) — adequate for small programs
+- **VM size:** B4ls_v2 (4 vCPU, 8GB RAM) — adequate for small programs
 - **Per-client isolation:** Separate VM and resource group per client
 - **Backups:** Automated pg_dump to Azure Blob Storage on cron
 - **DNS:** Subdomain per client (e.g. `clientname.ourplatform.ca`) via Azure DNS

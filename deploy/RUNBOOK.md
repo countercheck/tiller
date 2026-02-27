@@ -4,7 +4,7 @@ Step-by-step guide for standing up a new Breedbase instance on an Azure VM.
 Run each step in order. Do not skip steps.
 
 **Prerequisites:**
-- Azure VM provisioned (B2ms, Ubuntu 22.04 LTS) — see `infra/` for Terraform
+- Azure VM provisioned (B4ls_v2, Ubuntu 22.04 LTS) — see `infra/` for OpenTofu
 - DNS A record pointing `CLIENT_HOSTNAME` to the VM's public IP
 - SSH access to the VM
 
