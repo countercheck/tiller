@@ -54,7 +54,7 @@ infra/
 │   │       ├── variables.tf
 │   │       └── outputs.tf
 │   └── clients/
-│       └── edmonton.tfvars           # per-client values (committed, no secrets)
+│       └── violet-moose-lantern.tfvars           # per-client values (committed, no secrets)
 └── (future: aws/, gcp/)
 ```
 
@@ -62,7 +62,7 @@ infra/
 
 | Variable | Default | Notes |
 |---|---|---|
-| `client_name` | — | Short identifier, e.g. `edmonton` |
+| `client_name` | — | Short identifier, e.g. `violet-moose-lantern` |
 | `location` | `canadacentral` | Azure region |
 | `vm_size` | `Standard_B2ms` | |
 | `admin_username` | `tiller` | SSH user on the VM |
@@ -102,8 +102,8 @@ infra/
 ```bash
 cd infra/azure
 terraform init
-terraform plan  -var-file=clients/edmonton.tfvars
-terraform apply -var-file=clients/edmonton.tfvars
+terraform plan  -var-file=clients/violet-moose-lantern.tfvars
+terraform apply -var-file=clients/violet-moose-lantern.tfvars
 
 # Consume outputs in RUNBOOK:
 terraform output public_ip_address      # → set DNS A record

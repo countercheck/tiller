@@ -27,7 +27,7 @@ to be repeatable across multiple small breeding programs.
 - **Software engineer** architecture, build, deployment, maintenance
 - **Senior plant breeder** domain expertise, advisory relationship with the
   initial client, analytical pipeline, report design
-- The breeder has an existing trusted advisory relationship with the Edmonton client, which
+- The breeder has an existing trusted advisory relationship with the initial client, which
   is the initial commercial opportunity.
 
 ---
@@ -64,10 +64,10 @@ The two team members have different language strengths, and the work is divided 
 
 ## Business Model
 
-- **Target price:** $10,000–$15,000 CAD/year per client
-- **Infrastructure cost target:** ~$1,200 CAD/year per client (Azure B2ms VM)
-- **Initial implementation and migration:** Either a modest setup fee (~$3–5k) or a loss
-  leader for the first client to establish a reference deployment
+- **Target price:** Competitive annual subscription per client
+- **Infrastructure cost target:** Low per-client cost on Azure B2ms VM
+- **Initial implementation and migration:** Either a modest setup fee or a loss leader for
+  the first client to establish a reference deployment
 - **Repeatability is the strategy:** The first deployment builds the runbook, IaC templates,
   migration tooling, and helper package that make subsequent clients cheaper to onboard
 - Each client gets their own VM and isolated deployment (no multi-tenancy for now)
@@ -213,7 +213,7 @@ client actually needs.
 - **Cloud provider:** Microsoft Azure
 - **Region:** Canada Central (Toronto) — data stays in Canada, no hard residency requirement
   but good practice for government-adjacent clients
-- **VM size:** B2ms (2 vCPU, 8GB RAM) — ~$90–100 CAD/month, adequate for small programs
+- **VM size:** B2ms (2 vCPU, 8GB RAM) — adequate for small programs
 - **Per-client isolation:** Separate VM and resource group per client
 - **Backups:** Automated pg_dump to Azure Blob Storage on cron
 - **DNS:** Subdomain per client (e.g. `clientname.ourplatform.ca`) via Azure DNS
@@ -222,7 +222,7 @@ client actually needs.
 
 ### Repeatable Deployment Assets (to build)
 
-- Bicep or ARM template for VM + networking + storage per client
+- OpenTofu configuration for VM + networking + storage per client
 - Docker Compose file (standardised, parameterised)
 - `sgn_local.conf` template for new breeding programs
 - nginx config template

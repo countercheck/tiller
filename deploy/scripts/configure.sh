@@ -6,8 +6,8 @@
 #   configure.sh <source_template> <destination_file>
 #
 # Required environment variables:
-#   CLIENT_HOSTNAME  e.g. edmonton.ourplatform.ca
-#   CLIENT_NAME      e.g. edmonton
+#   CLIENT_HOSTNAME  e.g. violet-moose-lantern.ourplatform.ca
+#   CLIENT_NAME      e.g. violet-moose-lantern
 #   DB_PASSWORD      PostgreSQL password for web_usr
 #   CONTACT_EMAIL    admin contact address
 set -euo pipefail

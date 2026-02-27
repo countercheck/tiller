@@ -33,12 +33,12 @@ deploy/
 
 | Placeholder | Example | Used in |
 |---|---|---|
-| `{{CLIENT_HOSTNAME}}` | `edmonton.ourplatform.ca` | nginx, sgn_local.conf |
-| `{{CLIENT_NAME}}` | `edmonton` | sgn_local.conf, backup.sh |
+| `{{CLIENT_HOSTNAME}}` | `violet-moose-lantern.ourplatform.ca` | nginx, sgn_local.conf |
+| `{{CLIENT_NAME}}` | `violet-moose-lantern` | sgn_local.conf, backup.sh |
 | `{{DB_PASSWORD}}` | *(generated at deploy time)* | sgn_local.conf |
 | `{{CONTACT_EMAIL}}` | `admin@ourplatform.ca` | sgn_local.conf |
 | `{{AZURE_STORAGE_ACCOUNT}}` | `tillerbackups` | backup.sh |
-| `{{AZURE_CONTAINER}}` | `edmonton-backups` | backup.sh |
+| `{{AZURE_CONTAINER}}` | `violet-moose-lantern-backups` | backup.sh |
 
 Note: `PROGRAM_NAME` (the Breedbase breeding program, e.g. `AB_Barley`) is not a
 config file value — it is created through the Breedbase UI after deployment.

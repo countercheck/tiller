@@ -1,7 +1,7 @@
 # infra/azure/variables.tf
 
 variable "client_name" {
-  description = "Short client identifier, e.g. edmonton. Used in resource names."
+  description = "Short client identifier, e.g. violet-moose-lantern. Used in resource names."
   type        = string
 
   validation {

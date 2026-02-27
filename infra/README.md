@@ -33,7 +33,7 @@ same outputs using provider-specific resources.
 ```bash
 cd infra/azure
 
-# 1. Edit clients/<client>.tfvars with correct values (copy from edmonton.tfvars)
+# 1. Edit clients/<client>.tfvars with correct values (copy from violet-moose-lantern.tfvars)
 # 2. Provision
 export ARM_SUBSCRIPTION_ID="<your-subscription-id>"
 tofu init

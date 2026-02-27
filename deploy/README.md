@@ -33,8 +33,8 @@ variables and performs substitution via sed.
 
 | Placeholder | Description | Used in |
 |---|---|---|
-| `{{CLIENT_HOSTNAME}}` | Public hostname, e.g. `edmonton.ourplatform.ca` | nginx, sgn_local.conf |
-| `{{CLIENT_NAME}}` | Short client identifier, e.g. `edmonton` | sgn_local.conf |
+| `{{CLIENT_HOSTNAME}}` | Public hostname, e.g. `violet-moose-lantern.ourplatform.ca` | nginx, sgn_local.conf |
+| `{{CLIENT_NAME}}` | Short client identifier, e.g. `violet-moose-lantern` | sgn_local.conf |
 | `{{DB_PASSWORD}}` | PostgreSQL password for `web_usr` — generate at deploy time | sgn_local.conf |
 | `{{CONTACT_EMAIL}}` | Admin contact address | sgn_local.conf |
 

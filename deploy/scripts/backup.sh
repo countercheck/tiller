@@ -3,8 +3,8 @@
 # Weekly database backup: pg_dump from breedbase_db container → Azure Blob Storage.
 #
 # Install as cron job (as root or user with Docker access):
-#   0 2 * * 0  CLIENT_NAME=edmonton AZURE_STORAGE_ACCOUNT=tillerbackups \
-#              AZURE_CONTAINER=edmonton-backups /path/to/backup.sh
+#   0 2 * * 0  CLIENT_NAME=violet-moose-lantern AZURE_STORAGE_ACCOUNT=tillerbackups \
+#              AZURE_CONTAINER=violet-moose-lantern-backups /path/to/backup.sh
 #
 # Required environment variables:
 #   CLIENT_NAME            used in backup filename

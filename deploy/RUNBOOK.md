@@ -72,12 +72,12 @@ Create `/etc/breedbase-client.env` (not committed to git — contains secrets):
 
 ```bash
 sudo tee /etc/breedbase-client.env > /dev/null <<EOF
-CLIENT_HOSTNAME=edmonton.ourplatform.ca
-CLIENT_NAME=edmonton
+CLIENT_HOSTNAME=violet-moose-lantern.ourplatform.ca
+CLIENT_NAME=violet-moose-lantern
 DB_PASSWORD=$(openssl rand -base64 24)
 CONTACT_EMAIL=admin@ourplatform.ca
 AZURE_STORAGE_ACCOUNT=tillerbackups
-AZURE_CONTAINER=edmonton-backups
+AZURE_CONTAINER=violet-moose-lantern-backups
 EOF
 # Give ownership to the deployment user so they can source it without sudo
 sudo chown $USER /etc/breedbase-client.env

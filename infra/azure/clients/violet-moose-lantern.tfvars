@@ -1,8 +1,8 @@
-# infra/azure/clients/edmonton.tfvars
-# Per-client values for the Edmonton deployment.
+# infra/azure/clients/violet-moose-lantern.tfvars
+# Per-client values for the violet-moose-lantern deployment.
 # No secrets here — admin_ssh_public_key is a public key.
 
-client_name                   = "edmonton"
+client_name                   = "violet-moose-lantern"
 location                      = "canadacentral"
 vm_size                       = "Standard_B2ms"
 admin_username                = "tiller"

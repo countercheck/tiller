@@ -2,7 +2,7 @@
 
 Python scripts for migrating historical data from Genovix into Breedbase.
 
-Awaiting data dump from the Edmonton client. Format unknown.
+Awaiting data dump from the the initial client. Format unknown.
 
 ## Approach
 
