@@ -4,8 +4,8 @@
 
 client_name                   = "violet-moose-lantern"
 location                      = "canadacentral"
-vm_size                       = "Standard_B2ms"
+vm_size                       = "Standard_B4ls_v2"
 admin_username                = "tiller"
-admin_ssh_public_key          = "ssh-ed25519 REPLACE_WITH_ACTUAL_PUBLIC_KEY operator@host"
+admin_ssh_public_key          = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICAHQS6/H8rF2adbLOnYUiUWcLIDTVNzYrktuu55mH76"
 backup_storage_account_name   = "tillerbackups"
 backup_storage_resource_group = "tiller-platform"
