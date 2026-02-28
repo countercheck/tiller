@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "pagination": {"totalCount": 2, "pageSize": 1000, "totalPages": 1, "currentPage": 0},
+    "status": [],
+    "datafiles": []
+  },
+  "result": {
+    "data": [
+      {
+        "trialDbId": "1",
+        "trialName": "2024 AB Barley Yield Trial",
+        "programName": "AB_Barley",
+        "startDate": "2024-05-01",
+        "endDate": "2024-09-30",
+        "active": true
+      },
+      {
+        "trialDbId": "2",
+        "trialName": "2023 AB Barley Yield Trial",
+        "programName": "AB_Barley",
+        "startDate": "2023-05-01",
+        "endDate": "2023-09-30",
+        "active": false
+      }
+    ]
+  }
+}
