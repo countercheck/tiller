@@ -1,0 +1,29 @@
+{
+  "metadata": {
+    "pagination": {"totalCount": 2, "pageSize": 1000, "totalPages": 1, "currentPage": 0},
+    "status": [],
+    "datafiles": []
+  },
+  "result": {
+    "data": [
+      {
+        "observationUnitDbId": "ou1",
+        "germplasmName": "Harrington",
+        "plotNumber": "1",
+        "observations": [
+          {"observationVariableName": "Yield", "value": "6.2", "observationDbId": "o1"},
+          {"observationVariableName": "Height", "value": "92",  "observationDbId": "o2"}
+        ]
+      },
+      {
+        "observationUnitDbId": "ou2",
+        "germplasmName": "CDC Bow",
+        "plotNumber": "2",
+        "observations": [
+          {"observationVariableName": "Yield",  "value": "5.8", "observationDbId": "o3"},
+          {"observationVariableName": "Height",  "value": "88",  "observationDbId": "o4"}
+        ]
+      }
+    ]
+  }
+}
