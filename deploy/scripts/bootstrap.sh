@@ -39,7 +39,7 @@ RSTUDIO_URL="https://download2.rstudio.org/server/jammy/amd64/${RSTUDIO_DEB}"
 
 if ! systemctl is-active --quiet rstudio-server 2>/dev/null; then
     wget -q -O "/tmp/${RSTUDIO_DEB}" "${RSTUDIO_URL}"
-    sudo dpkg -i "/tmp/${RSTUDIO_DEB}"
+    sudo apt-get install -y "/tmp/${RSTUDIO_DEB}"
     rm "/tmp/${RSTUDIO_DEB}"
     # Restrict RStudio to localhost — nginx handles external access
     sudo mkdir -p /etc/rstudio
