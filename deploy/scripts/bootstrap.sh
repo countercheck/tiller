@@ -26,6 +26,30 @@ fi
 
 sudo apt-get install -y docker-compose-plugin
 
+echo "=== Bootstrap: installing R ==="
+if ! command -v Rscript &>/dev/null; then
+    sudo apt-get install -y r-base r-base-dev \
+        libssl-dev libcurl4-openssl-dev libxml2-dev
+fi
+
+echo "=== Bootstrap: installing RStudio Server ==="
+# Check https://posit.co/download/rstudio-server/ for latest Jammy amd64 version
+RSTUDIO_DEB="rstudio-server-2024.12.0-467-amd64.deb"
+RSTUDIO_URL="https://download2.rstudio.org/server/jammy/amd64/${RSTUDIO_DEB}"
+
+if ! systemctl is-active --quiet rstudio-server 2>/dev/null; then
+    wget -q -O "/tmp/${RSTUDIO_DEB}" "${RSTUDIO_URL}"
+    sudo dpkg -i "/tmp/${RSTUDIO_DEB}"
+    rm "/tmp/${RSTUDIO_DEB}"
+    # Restrict RStudio to localhost — nginx handles external access
+    sudo mkdir -p /etc/rstudio
+    echo "www-address=127.0.0.1" | sudo tee /etc/rstudio/rserver.conf > /dev/null
+    sudo systemctl enable rstudio-server
+    sudo systemctl start rstudio-server
+else
+    echo "  RStudio Server already running — skipping"
+fi
+
 echo "=== Bootstrap: installing nginx and certbot ==="
 sudo apt-get install -y nginx certbot python3-certbot-nginx
 
@@ -63,3 +87,4 @@ echo "IMPORTANT: Log out and back in to activate Docker group membership."
 echo "Then:"
 echo "  1. Create /etc/breedbase-client.env  (RUNBOOK.md step 4)"
 echo "  2. Run: bash /opt/tiller/deploy/scripts/deploy.sh"
+echo "     (This will configure nginx for /rstudio and create user accounts)"
