@@ -182,7 +182,26 @@ else
     echo "  Cron job already installed — skipping"
 fi
 
-# --- 12. Install bbr R package -----------------------------------------------
+# --- 12. Install R analytical packages ---------------------------------------
+
+echo "=== Installing R analytical packages ==="
+# Install system-wide so both breeder and analyst accounts can use them
+# without waiting for per-user compilation. These are the core packages
+# for trial analysis and GBLUP.
+sudo Rscript -e "
+    pkgs <- c('lme4', 'emmeans', 'rrBLUP', 'sommer')
+    to_install <- pkgs[!pkgs %in% installed.packages()[,'Package']]
+    if (length(to_install) > 0) {
+        install.packages(to_install,
+                         repos = 'https://cloud.r-project.org',
+                         quiet = TRUE)
+        cat('Installed:', paste(to_install, collapse = ', '), '\n')
+    } else {
+        cat('All analytical packages already installed\n')
+    }
+"
+
+# --- 13. Install bbr R package -----------------------------------------------
 
 echo "=== Installing bbr R package ==="
 sudo Rscript -e "
