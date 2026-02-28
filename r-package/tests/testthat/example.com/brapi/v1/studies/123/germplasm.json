@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "pagination": {"totalCount": 3, "pageSize": 1000, "totalPages": 1, "currentPage": 0},
+    "status": [],
+    "datafiles": []
+  },
+  "result": {
+    "data": [
+      {"germplasmDbId": "g1", "germplasmName": "Harrington", "entryNumber": "1"},
+      {"germplasmDbId": "g2", "germplasmName": "CDC Bow",    "entryNumber": "2"},
+      {"germplasmDbId": "g3", "germplasmName": "Legacy",     "entryNumber": "3"}
+    ]
+  }
+}
