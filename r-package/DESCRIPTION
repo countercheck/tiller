@@ -1,0 +1,20 @@
+Package: bbr
+Title: Breedbase R Client
+Version: 0.1.0
+Authors@R:
+    person("Tiller", "Dev", role = c("aut", "cre"),
+           email = "dev@tiller-ag.org")
+Description: Thin R client for Breedbase BrAPI v1.3 endpoints. Wraps
+    httr2 to provide bb_connect() for token authentication and query
+    functions that return tidy data frames.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports:
+    httr2
+Suggests:
+    httptest2,
+    testthat (>= 3.0.0),
+    withr
+Config/testthat/edition: 3
