@@ -38,6 +38,18 @@ set +a
 
 echo "=== Deploying: $CLIENT_HOSTNAME ==="
 
+# --- 1b. Create RStudio user accounts ----------------------------------------
+
+echo "=== Creating RStudio user accounts ==="
+for user in breeder analyst; do
+    if ! id "$user" &>/dev/null; then
+        sudo useradd --create-home --shell /bin/bash "$user"
+        echo "  Created user: $user (set password manually: sudo passwd $user)"
+    else
+        echo "  User $user already exists — skipping"
+    fi
+done
+
 # --- 2. Configure nginx -------------------------------------------------------
 
 echo "=== Configuring nginx ==="
@@ -95,6 +107,8 @@ echo "=== Starting nginx ==="
 sudo nginx -t
 sudo systemctl start nginx
 sudo systemctl enable nginx
+# Restart RStudio Server to pick up any rserver.conf changes
+sudo systemctl restart rstudio-server 2>/dev/null || true
 
 # --- 6. Configure Breedbase (hordeum.conf) ------------------------------------
 
@@ -168,6 +182,20 @@ else
     echo "  Cron job already installed — skipping"
 fi
 
+# --- 12. Install bbr R package -----------------------------------------------
+
+echo "=== Installing bbr R package ==="
+sudo Rscript -e "
+    if (!requireNamespace('remotes', quietly = TRUE)) {
+        install.packages('remotes', repos = 'https://cloud.r-project.org', quiet = TRUE)
+    }
+    remotes::install_local('/opt/tiller/r-package',
+                           dependencies = TRUE,
+                           upgrade      = 'never',
+                           quiet        = TRUE)
+    cat('bbr installed successfully\n')
+"
+
 # --- Done ---------------------------------------------------------------------
 
 echo ""
@@ -178,4 +206,6 @@ echo "  Smoke test checklist (RUNBOOK.md step 11):"
 echo "    - https://$CLIENT_HOSTNAME  loads the Breedbase homepage"
 echo "    - SSL certificate is valid"
 echo "    - Login with the admin account created during breedbase setup"
+echo "    - https://$CLIENT_HOSTNAME/rstudio/  opens RStudio Server login"
+echo "    - Login with breeder or analyst (passwords set via: sudo passwd <user>)"
 echo "======================================================================"
