@@ -82,6 +82,52 @@ The first image pull is several GB and takes 10–20 minutes.
 
 ---
 
+## 11a. Set RStudio user passwords
+
+`deploy.sh` creates `breeder` and `analyst` accounts with no password. Set passwords
+before handing access to users:
+
+```bash
+sudo passwd breeder
+sudo passwd analyst
+```
+
+Choose strong passwords. These are used to log in to RStudio Server at
+`https://$CLIENT_HOSTNAME/rstudio/`.
+
+---
+
+## 11b. Configure .Renviron for each RStudio user
+
+Each user needs their Breedbase API token in their `.Renviron` file.
+
+**Get the API token from Breedbase:**
+1. Log in to `https://$CLIENT_HOSTNAME` as admin
+2. Go to Admin → Manage Users → select the user's Breedbase account
+3. Copy or generate their API token
+
+**Set .Renviron for each user** (run as root):
+
+```bash
+sudo -u breeder tee /home/breeder/.Renviron > /dev/null <<EOF
+BB_URL=https://${CLIENT_HOSTNAME}
+BB_TOKEN=<paste token here>
+EOF
+sudo chmod 600 /home/breeder/.Renviron
+```
+
+Repeat for `analyst`.
+
+**Verify it works** — log in to RStudio as the user and run:
+
+```r
+library(bbr)
+con <- bb_connect()
+con  # should print <bbr_con> with URL
+```
+
+---
+
 ## 11. Smoke test checklist
 
 - [ ] `https://$CLIENT_HOSTNAME` loads the Breedbase homepage
@@ -100,6 +146,10 @@ The first image pull is several GB and takes 10–20 minutes.
   ```
 
 - [ ] `./bin/breedbase status` shows all containers running
+- [ ] `https://$CLIENT_HOSTNAME/rstudio/` opens the RStudio Server login page
+- [ ] Login as `breeder` succeeds
+- [ ] `library(bbr); bb_connect()` runs without error in RStudio
+- [ ] `get_trials(bb_connect())` returns a data frame (may be empty if no data yet)
 
 ---
 
@@ -166,4 +216,12 @@ cd /opt/breedbase && ./bin/breedbase stop && ./bin/breedbase start
 **Re-run DB patches after a Breedbase update:**
 ```bash
 cd /opt/breedbase && ./bin/breedbase patch hordeum
+```
+
+**RStudio Server:**
+```bash
+sudo systemctl status rstudio-server
+sudo systemctl restart rstudio-server
+# Logs:
+sudo journalctl -u rstudio-server -f
 ```
