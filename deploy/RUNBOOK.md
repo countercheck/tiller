@@ -101,17 +101,27 @@ Choose strong passwords. These are used to log in to RStudio Server at
 
 Each user needs their Breedbase API token in their `.Renviron` file.
 
-**Get the API token from Breedbase:**
-1. Log in to `https://$CLIENT_HOSTNAME` as admin
-2. Go to Admin → Manage Users → select the user's Breedbase account
-3. Copy or generate their API token
+**Generate API tokens from the CLI** (persistent — does not expire with sessions):
 
-**Set .Renviron for each user** (run as root):
+```bash
+docker exec breedbase_db psql -U postgres -d cxgn_hordeum -c \
+  "UPDATE sgn_people.sp_person
+   SET cookie_string = md5(random()::text || clock_timestamp()::text)
+   WHERE username = 'breeder'
+   RETURNING username, cookie_string;"
+```
+
+Copy the returned `cookie_string` — that is the value for `BB_TOKEN`. Repeat for `analyst`.
+
+Note: Breedbase stores the persistent API token as `cookie_string` in `sgn_people.sp_person`.
+It does not expire between sessions.
+
+**Set .Renviron for each user** (run as root, substituting the token returned above):
 
 ```bash
 sudo -u breeder tee /home/breeder/.Renviron > /dev/null <<EOF
 BB_URL=https://${CLIENT_HOSTNAME}
-BB_TOKEN=<paste token here>
+BB_TOKEN=<cookie_string from above>
 EOF
 sudo chmod 600 /home/breeder/.Renviron
 ```
