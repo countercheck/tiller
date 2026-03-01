@@ -42,8 +42,9 @@ if ! systemctl is-active --quiet rstudio-server 2>/dev/null; then
     sudo apt-get install -y "/tmp/${RSTUDIO_DEB}"
     rm "/tmp/${RSTUDIO_DEB}"
     # Restrict RStudio to localhost — nginx handles external access
+    # www-root-path required so RStudio generates correct URLs under /rstudio/
     sudo mkdir -p /etc/rstudio
-    echo "www-address=127.0.0.1" | sudo tee /etc/rstudio/rserver.conf > /dev/null
+    printf 'www-address=127.0.0.1\nwww-root-path=/rstudio\n' | sudo tee /etc/rstudio/rserver.conf > /dev/null
     sudo systemctl enable rstudio-server
     sudo systemctl start rstudio-server
 else
