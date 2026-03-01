@@ -176,6 +176,30 @@ az storage account management-policy create \
 
 ---
 
+## Resetting the Breedbase admin password
+
+Breedbase stores passwords as bcrypt hashes via PostgreSQL's `pgcrypto` extension (installed
+in the `sgn` schema). Plain MD5 will not work.
+
+**List users:**
+```bash
+docker exec breedbase_db psql -U postgres -d cxgn_hordeum -c \
+  "SELECT sp_person_id, username, first_name, last_name FROM sgn_people.sp_person ORDER BY sp_person_id;"
+```
+
+**Reset a password** (replace `admin` and `newpassword`):
+```bash
+docker exec breedbase_db psql -U postgres -d cxgn_hordeum -c \
+  "UPDATE sgn_people.sp_person SET password = sgn.crypt('newpassword', sgn.gen_salt('bf')) WHERE username = 'admin';"
+```
+
+Note: the web container is named `breedbase_hordeum` (not `breedbase_web`). The DB container
+is `breedbase_db`. Run `docker ps --format '{{.Names}}'` to confirm.
+
+The Breedbase homepage is at `/breeders/` — the root `/` returns 404, which is expected.
+
+---
+
 ## Maintenance
 
 **Start/stop:**
